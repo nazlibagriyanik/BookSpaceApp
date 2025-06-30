@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Üye Paneli</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body class="bg-light">
+    <header>
+        <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+            <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">BookSpace Üye Paneli</a>
+            <ul class="navbar-nav px-3">
+                <li class="nav-item text-nowrap">
+                    <form asp-area="" asp-controller="Account" asp-action="Logout" method="post">
+                        <button type="submit" class="nav-link btn btn-link text-white">Çıkış Yap</button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container-fluid">
+        <div class="row">
+            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-white sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Index">
+                                <i class="fas fa-user-circle"></i> Hesabım
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Member" asp-controller="Member" asp-action="MyDiscussions">
+                                <i class="fas fa-comments"></i> Tartışmalarım
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Member" asp-controller="Member" asp-action="BookRecommendations">
+                                <i class="fas fa-book-open"></i> Kitap Önerileri
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Books" asp-action="Index">
+                                <i class="fas fa-book"></i> Tüm Kitaplar
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Discussions" asp-action="Index">
+                                <i class="fas fa-comments"></i> Tüm Tartışmalar
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">
+                                <i class="fas fa-home"></i> Ana Sayfa
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">@ViewData["Title"]</h1>
+                    @await RenderSectionAsync("HeaderAddon", required: false)
+                </div>
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html> 

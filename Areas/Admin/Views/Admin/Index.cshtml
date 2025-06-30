@@ -1,0 +1,105 @@
+@model bookspace.Areas.Admin.Controllers.AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Admin Dashboard</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-3 mb-4">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total Users</h5>
+                <h2 class="card-text">@Model.TotalUsers</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total Books</h5>
+                <h2 class="card-text">@Model.TotalBooks</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total Categories</h5>
+                <h2 class="card-text">@Model.TotalCategories</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total Discussions</h5>
+                <h2 class="card-text">@Model.TotalDiscussions</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Recent Users</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.RecentUsers.Any())
+                {
+                    <div class="list-group list-group-flush">
+                        @foreach (var user in Model.RecentUsers)
+                        {
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>@user.UserName</strong>
+                                    <br>
+                                    <small class="text-muted">@user.Email</small>
+                                </div>
+                                <small class="text-muted">@user.CreatedAt.ToString("MMM dd, yyyy")</small>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted">No users found.</p>
+                }
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Recent Books</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.RecentBooks.Any())
+                {
+                    <div class="list-group list-group-flush">
+                        @foreach (var book in Model.RecentBooks)
+                        {
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>@book.Title</strong>
+                                    <br>
+                                    <small class="text-muted">@book.Author • @book.Category?.Name</small>
+                                </div>
+                                <small class="text-muted">@book.PublicationYear</small>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted">No books found.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div> 

@@ -1,0 +1,41 @@
+﻿@model IEnumerable<bookspace.Models.Category>
+@{
+    ViewData["Title"] = "Kategoriler";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-tags text-primary me-2"></i>Kategoriler</h1>
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i>Yeni Kategori Ekle
+        </a>
+    }
+</div>
+
+<div class="row">
+    @if (Model != null && Model.Any())
+    {
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 mb-4">
+                @await Html.PartialAsync("_CategoryCard", item)
+            </div>
+        }
+    }
+    else
+    {
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                <h4><i class="fas fa-info-circle me-2"></i>Kategori bulunamadı</h4>
+                <p>Kategoriler eklendikten sonra burada görünecektir.</p>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-action="Create" class="btn btn-primary">
+                        <i class="fas fa-plus me-1"></i>İlk Kategoriyi Ekle
+                    </a>
+                }
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,79 @@
+﻿@model IEnumerable<bookspace.Models.Book>
+@{
+    ViewData["Title"] = "Kitaplar";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-book text-primary me-2"></i>Kitaplar</h1>
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i>Yeni Kitap Ekle
+        </a>
+    }
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-8">
+        <form asp-action="Index" method="get" class="d-flex">
+            <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control me-2" placeholder="Başlık veya yazar ara..." />
+            <button type="submit" class="btn btn-outline-primary">
+                <i class="fas fa-search me-1"></i>Ara
+            </button>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <select name="categoryId" class="form-select" onchange="this.form.submit()">
+            <option value="">Tüm Kategoriler</option>
+            @foreach (var item in ViewBag.Categories)
+            {
+                if (item.Value == ViewData["CurrentCategory"]?.ToString())
+                {
+                    <option value="@item.Value" selected>@item.Text</option>
+                }
+                else
+                {
+                    <option value="@item.Value">@item.Text</option>
+                }
+            }
+        </select>
+    </div>
+</div>
+
+<div class="row">
+    @if (Model != null && Model.Any())
+    {
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 mb-4">
+                @await Html.PartialAsync("_BookCard", item)
+            </div>
+        }
+    }
+    else
+    {
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                <h4>Kitap bulunamadı</h4>
+                <p>Arama kriterlerinizi değiştirmeyi deneyin veya tüm kitapları görüntüleyin.</p>
+                <a asp-action="Index" class="btn btn-primary">
+                    <i class="fas fa-book me-1"></i>Tüm Kitapları Görüntüle
+                </a>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <h3><i class="fas fa-sort me-2"></i>Sıralama Seçenekleri</h3>
+        <div class="btn-group" role="group">
+            <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" class="btn btn-outline-secondary">
+                <i class="fas fa-font me-1"></i>Başlık
+            </a>
+            <a asp-action="Index" asp-route-sortOrder="@ViewData["AuthorSortParm"]" class="btn btn-outline-secondary">
+                <i class="fas fa-user me-1"></i>Yazar
+            </a>
+        </div>
+    </div>
+</div>

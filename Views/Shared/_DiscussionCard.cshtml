@@ -1,0 +1,33 @@
+@model bookspace.Models.Discussion
+
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+            <div class="flex-grow-1">
+                <h5 class="card-title">
+                    <a asp-controller="Discussions" asp-action="Details" asp-route-id="@Model.Id" class="text-decoration-none">@Model.Title</a>
+                </h5>
+                <p class="card-text">@(Model.Content.Length > 200 ? Model.Content.Substring(0, 200) + "..." : Model.Content)</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">
+                        <i class="fas fa-user me-1"></i>@Model.User?.UserName tarafından @Model.CreatedAt.ToString("dd MMMM yyyy")
+                    </small>
+                    <small class="text-muted">
+                        <i class="fas fa-book me-1"></i>@Model.Book?.Title • <i class="fas fa-comments me-1"></i>@(Model.Comments?.Count ?? 0) yorum
+                    </small>
+                </div>
+            </div>
+            @if (User.Identity?.IsAuthenticated == true && (Model.UserId == User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value || User.IsInRole("Admin")))
+            {
+                <div class="ms-3">
+                    <a asp-controller="Discussions" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-sm">
+                        <i class="fas fa-edit me-1"></i>Düzenle
+                    </a>
+                    <a asp-controller="Discussions" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash me-1"></i>Sil
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div> 

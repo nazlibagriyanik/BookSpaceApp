@@ -1,0 +1,20 @@
+@model bookspace.Models.Comment
+
+<div class="card mb-3">
+    <div class="card-body">
+        <p class="card-text">@Model.Content</p>
+        <div class="d-flex justify-content-between align-items-center">
+            <small class="text-muted">
+                By: @(Model.User?.UserName ?? "Unknown User") on @Model.CreatedAt.ToString("MMM dd, yyyy 'at' HH:mm")
+            </small>
+            @if (User.Identity?.IsAuthenticated == true && (User.IsInRole("Admin") || Model.UserId == User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value))
+            {
+                <form asp-controller="Discussions" asp-action="DeleteComment" method="post" style="display: inline;">
+                    <input type="hidden" name="commentId" value="@Model.Id" />
+                    <input type="hidden" name="discussionId" value="@Model.DiscussionId" />
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this comment?')">Delete</button>
+                </form>
+            }
+        </div>
+    </div>
+</div> 

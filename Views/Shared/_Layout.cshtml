@@ -1,0 +1,205 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BookSpace</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/bookspace.styles.css" asp-append-version="true" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="container">
+                <!-- Logo/Brand -->
+                <a class="navbar-brand fw-bold fs-3 d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-book-open me-2"></i>
+                    <span class="d-none d-sm-inline">BookSpace</span>
+                </a>
+                
+                <!-- Mobile Toggle Button -->
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" 
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <!-- Navigation Items -->
+                <div class="navbar-collapse collapse d-lg-inline-flex justify-content-between">
+                    <!-- Left Side Menu -->
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link text-light fw-semibold px-3" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="fas fa-home me-1"></i>
+                                <span class="d-none d-md-inline">Ana Sayfa</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light fw-semibold px-3" asp-area="" asp-controller="Books" asp-action="Index">
+                                <i class="fas fa-book me-1"></i>
+                                <span class="d-none d-md-inline">Kitaplar</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light fw-semibold px-3" asp-area="" asp-controller="Categories" asp-action="Index">
+                                <i class="fas fa-tags me-1"></i>
+                                <span class="d-none d-md-inline">Kategoriler</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light fw-semibold px-3" asp-area="" asp-controller="Discussions" asp-action="Index">
+                                <i class="fas fa-comments me-1"></i>
+                                <span class="d-none d-md-inline">Tartışmalar</span>
+                            </a>
+                        </li>
+                        
+                        <!-- Admin Dropdown -->
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-light fw-semibold px-3" href="#" id="adminDropdown" 
+                                   role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-crown me-1"></i>
+                                    <span class="d-none d-md-inline">Admin</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0" aria-labelledby="adminDropdown">
+                                    <li><h6 class="dropdown-header">Yönetim</h6></li>
+                                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="Admin" asp-action="Index">
+                                        <i class="fas fa-tachometer-alt me-2 text-primary"></i>Gösterge Paneli
+                                    </a></li>
+                                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="Admin" asp-action="Users">
+                                        <i class="fas fa-users me-2 text-success"></i>Kullanıcılar
+                                    </a></li>
+                                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="Admin" asp-action="Statistics">
+                                        <i class="fas fa-chart-bar me-2 text-info"></i>İstatistikler
+                                    </a></li>
+                                </ul>
+                            </li>
+                        }
+                        
+                        <!-- Member Dropdown -->
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-light fw-semibold px-3" href="#" id="memberDropdown" 
+                                   role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-user me-1"></i>
+                                    <span class="d-none d-md-inline">Hesabım</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0" aria-labelledby="memberDropdown">
+                                    <li><h6 class="dropdown-header">Panelim</h6></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Index">
+                                        <i class="fas fa-user-circle me-2 text-primary"></i>Hesabım
+                                    </a></li>
+                                    <li><a class="dropdown-item" asp-area="Member" asp-controller="Member" asp-action="MyDiscussions">
+                                        <i class="fas fa-comments me-2 text-success"></i>Tartışmalarım
+                                    </a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Profile">
+                                        <i class="fas fa-user-edit me-2 text-info"></i>Profili Düzenle
+                                    </a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-area="Member" asp-controller="Member" asp-action="BookRecommendations">
+                                        <i class="fas fa-magic me-2 text-purple"></i>Yapay Zeka Önerileri
+                                    </a></li>
+                                </ul>
+                            </li>
+                        }
+                    </ul>
+                    
+                    <!-- Right Side - User Actions -->
+                    <ul class="navbar-nav ms-auto">
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <li class="nav-item me-2">
+                                <span class="navbar-text text-light fw-semibold d-none d-lg-inline">
+                                    <i class="fas fa-user-circle me-1"></i>Merhaba, @(User.Identity.Name ?? "Kullanıcı")!
+                                </span>
+                            </li>
+                            <li class="nav-item">
+                                <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-outline-light fw-semibold px-3">
+                                        <i class="fas fa-sign-out-alt me-1"></i>
+                                        <span class="d-none d-md-inline">Çıkış Yap</span>
+                                    </button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item me-2">
+                                <a class="nav-link text-light fw-semibold px-3" asp-area="" asp-controller="Account" asp-action="Login">
+                                    <i class="fas fa-sign-in-alt me-1"></i>
+                                    <span class="d-none d-md-inline">Giriş Yap</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-light fw-semibold px-3" asp-area="" asp-controller="Account" asp-action="Register">
+                                    <i class="fas fa-user-plus me-1"></i>
+                                    <span class="d-none d-md-inline">Kayıt Ol</span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar shadow-sm">
+                <div class="pt-3">
+                    @await Component.InvokeAsync("CategoryMenu")
+                </div>
+            </nav>
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">@ViewData["Title"]</h1>
+                    @await RenderSectionAsync("HeaderAddon", required: false)
+                </div>
+                <div class="pt-3">
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            @TempData["SuccessMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            @TempData["ErrorMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+                    @RenderBody()
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <footer class="border-top footer text-muted bg-light">
+        <div class="container py-3">
+            <div class="row">
+                <div class="col-md-6">
+                    &copy; 2025 - BookSpace - <a asp-area="" asp-controller="Home" asp-action="Privacy">Gizlilik</a>
+                </div>
+                <div class="col-md-6 text-end">
+                    <a href="https://github.com/yourusername/BookSpace" target="_blank" class="text-decoration-none text-muted">
+                        <i class="fab fa-github me-2"></i>
+                        <span class="d-none d-md-inline">GitHub</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

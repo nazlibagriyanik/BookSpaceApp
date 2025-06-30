@@ -1,0 +1,55 @@
+@model bookspace.Models.Discussion
+@{
+    ViewData["Title"] = "Tartışma Düzenle";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-edit text-primary me-2"></i>Tartışma Düzenle</h1>
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-1"></i>Tartışmalara Dön
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="UserId" />
+            <input type="hidden" asp-for="CreatedAt" />
+            
+            <div class="form-group mb-3">
+                <label asp-for="Title" class="control-label">Başlık</label>
+                <input asp-for="Title" class="form-control" placeholder="Tartışma başlığını girin..." />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="Content" class="control-label">İçerik</label>
+                <textarea asp-for="Content" class="form-control" rows="6" placeholder="Tartışma içeriğini düzenleyin..."></textarea>
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="BookId" class="control-label">Kitap</label>
+                <select asp-for="BookId" class="form-control" asp-items="ViewBag.BookId">
+                    <option value="">-- Kitap Seçin --</option>
+                </select>
+                <span asp-validation-for="BookId" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-1"></i>Değişiklikleri Kaydet
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-times me-1"></i>İptal
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

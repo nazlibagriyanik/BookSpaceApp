@@ -1,0 +1,42 @@
+@model List<Category>
+
+<div class="sidebar-sticky">
+    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+        <span>Kategoriler</span>
+    </h6>
+    <ul class="nav flex-column">
+        @foreach (var category in Model)
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-controller="Categories" asp-action="Details" asp-route-id="@category.Id" style="pointer-events: auto; z-index: 1000; position: relative;">
+                    @category.Name
+                    <span class="badge bg-secondary rounded-pill float-end">@(category.Books?.Count ?? 0)</span>
+                </a>
+            </li>
+        }
+    </ul>
+    
+    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+        <span>Hızlı İşlemler</span>
+    </h6>
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Books" asp-action="Index" style="pointer-events: auto; z-index: 1000; position: relative;">
+                <i class="fas fa-book me-2"></i>Tüm Kitaplar
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Discussions" asp-action="Index" style="pointer-events: auto; z-index: 1000; position: relative;">
+                <i class="fas fa-comments me-2"></i>Tüm Tartışmalar
+            </a>
+        </li>
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Index" style="pointer-events: auto; z-index: 1000; position: relative;">
+                    <i class="fas fa-user-circle me-2"></i>Hesabım
+                </a>
+            </li>
+        }
+    </ul>
+</div> 

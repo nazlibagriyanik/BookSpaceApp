@@ -1,0 +1,26 @@
+@model List<Book>
+
+<div class="row">
+    @foreach (var book in Model)
+    {
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                @if (!string.IsNullOrEmpty(book.CoverImageUrl))
+                {
+                    <img src="@book.CoverImageUrl" class="card-img-top" alt="@book.Title" style="height: 150px; object-fit: cover;">
+                }
+                else
+                {
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 150px;">
+                        <span class="text-muted">📖</span>
+                    </div>
+                }
+                <div class="card-body">
+                    <h6 class="card-title">@book.Title</h6>
+                    <p class="card-text"><small class="text-muted">@book.Author</small></p>
+                    <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id" class="btn btn-sm btn-outline-primary">View</a>
+                </div>
+            </div>
+        </div>
+    }
+</div> 

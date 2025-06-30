@@ -1,0 +1,139 @@
+@model bookspace.Models.Book
+@{
+    ViewData["Title"] = "Kitap Düzenle";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-edit text-primary me-2"></i>Kitap Düzenle</h1>
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-1"></i>Kitaplara Dön
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            
+            <div class="form-group mb-3">
+                <label asp-for="Title" class="control-label">Başlık</label>
+                <input asp-for="Title" class="form-control" placeholder="Kitap başlığını girin..." />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="Author" class="control-label">Yazar</label>
+                <input asp-for="Author" class="form-control" placeholder="Yazar adını girin..." />
+                <span asp-validation-for="Author" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="ISBN" class="control-label">ISBN</label>
+                <input asp-for="ISBN" class="form-control" placeholder="ISBN numarasını girin..." />
+                <span asp-validation-for="ISBN" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="PublicationYear" class="control-label">Yayın Yılı</label>
+                <input asp-for="PublicationYear" class="form-control" type="number" min="1000" max="@DateTime.Now.Year" placeholder="Yayın yılını girin..." />
+                <span asp-validation-for="PublicationYear" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="Description" class="control-label">Açıklama</label>
+                <textarea asp-for="Description" class="form-control" rows="4" placeholder="Kitap açıklamasını girin..."></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="CategoryId" class="control-label">Kategori</label>
+                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId">
+                    <option value="">-- Kategori Seçin --</option>
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label class="control-label">Kapak Resmi</label>
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="file" name="coverImage" class="form-control" accept="image/*" />
+                        <small class="form-text text-muted">Yeni resim dosyası yükleyin (JPG, PNG, GIF)</small>
+                    </div>
+                    <div class="col-md-6">
+                        <input asp-for="CoverImageUrl" class="form-control" placeholder="Veya resim URL'si girin" />
+                        <small class="form-text text-muted">Veya resim URL'si sağlayın</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-1"></i>Değişiklikleri Kaydet
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-times me-1"></i>İptal
+                </a>
+            </div>
+        </form>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-image me-2"></i>Mevcut Kapak Resmi</h5>
+            </div>
+            <div class="card-body">
+                <div id="imagePreview" class="text-center">
+                    @if (!string.IsNullOrEmpty(Model.CoverImageUrl))
+                    {
+                        <img id="previewImg" src="@Model.CoverImageUrl" alt="Kapak Önizleme" style="max-width: 100%; max-height: 300px;" class="img-fluid rounded" />
+                    }
+                    else
+                    {
+                        <img id="previewImg" src="" alt="Kapak Önizleme" style="max-width: 100%; max-height: 300px; display: none;" class="img-fluid rounded" />
+                        <p id="noImageText" class="text-muted">Resim seçilmedi</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // File upload preview
+        document.querySelector('input[name="coverImage"]').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const previewImg = document.getElementById('previewImg');
+            const noImageText = document.getElementById('noImageText');
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    previewImg.style.display = 'block';
+                    if (noImageText) noImageText.style.display = 'none';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // URL preview
+        document.getElementById('CoverImageUrl').addEventListener('input', function(e) {
+            const url = e.target.value;
+            const previewImg = document.getElementById('previewImg');
+            const noImageText = document.getElementById('noImageText');
+            
+            if (url) {
+                previewImg.src = url;
+                previewImg.style.display = 'block';
+                if (noImageText) noImageText.style.display = 'none';
+            } else {
+                previewImg.style.display = 'none';
+                if (noImageText) noImageText.style.display = 'block';
+            }
+        });
+    </script>
+} 

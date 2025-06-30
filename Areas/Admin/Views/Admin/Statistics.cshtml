@@ -1,0 +1,62 @@
+@model bookspace.Areas.Admin.Controllers.StatisticsViewModel
+@{
+    ViewData["Title"] = "Statistics";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Statistics</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Books by Category</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.BooksByCategory.Any())
+                {
+                    <div class="list-group list-group-flush">
+                        @foreach (var item in Model.BooksByCategory)
+                        {
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <span>@item.CategoryName</span>
+                                <span class="badge bg-primary rounded-pill">@item.BookCount</span>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted">No data available.</p>
+                }
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Discussions by Month</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.DiscussionsByMonth.Any())
+                {
+                    <div class="list-group list-group-flush">
+                        @foreach (var item in Model.DiscussionsByMonth)
+                        {
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <span>@item.Month</span>
+                                <span class="badge bg-success rounded-pill">@item.DiscussionCount</span>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted">No data available.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div> 

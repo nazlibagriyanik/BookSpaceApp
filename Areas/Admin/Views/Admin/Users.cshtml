@@ -1,0 +1,58 @@
+@model IEnumerable<bookspace.Areas.Admin.Controllers.UserViewModel>
+@{
+    ViewData["Title"] = "User Management";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>User Management</h1>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Roles</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td>@user.UserName</td>
+                            <td>@user.Email</td>
+                            <td>
+                                @foreach (var role in user.Roles)
+                                {
+                                    <span class="badge bg-primary me-1">@role</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <form asp-action="ToggleUserRole" method="post" style="display: inline;">
+                                        <input type="hidden" name="userId" value="@user.Id" />
+                                        <input type="hidden" name="roleName" value="Admin" />
+                                        <button type="submit" class="btn btn-sm @(user.Roles.Contains("Admin") ? "btn-danger" : "btn-success")">
+                                            @(user.Roles.Contains("Admin") ? "Remove Admin" : "Make Admin")
+                                        </button>
+                                    </form>
+                                    <form asp-action="ToggleUserRole" method="post" style="display: inline;">
+                                        <input type="hidden" name="userId" value="@user.Id" />
+                                        <input type="hidden" name="roleName" value="Member" />
+                                        <button type="submit" class="btn btn-sm @(user.Roles.Contains("Member") ? "btn-danger" : "btn-success")">
+                                            @(user.Roles.Contains("Member") ? "Remove Member" : "Make Member")
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div> 

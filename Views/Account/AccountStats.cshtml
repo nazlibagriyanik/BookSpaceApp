@@ -1,0 +1,191 @@
+@model bookspace.ViewModels.Account.AccountStatsViewModel
+@{
+    ViewData["Title"] = "Hesap Ýstatistikleri";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="mb-0">
+                    <i class="fas fa-chart-bar me-2"></i>Hesap Ýstatistikleri
+                </h1>
+                <a asp-action="Index" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left me-1"></i>Hesaba Dön
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- User Info Card -->
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user me-2"></i>Kullanýcý Bilgileri
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                            <i class="fas fa-user fa-2x text-white"></i>
+                        </div>
+                    </div>
+                    <h4 class="text-center mb-3">@Model.UserName</h4>
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <div class="border-end">
+                                <h6 class="text-muted">Üyelik Baþlangýcý</h6>
+                                <p class="mb-0 fw-bold">@Model.MemberSince.ToString("MMM yyyy")</p>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <h6 class="text-muted">Son Giriþ</h6>
+                            <p class="mb-0 fw-bold">
+                                @(Model.LastLogin?.ToString("MMM dd, yyyy") ?? "Never")
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reading Statistics -->
+        <div class="col-lg-8 mb-4">
+            <div class="card shadow h-100">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-book me-2"></i>Okuma Ýstatistikleri
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 text-center mb-3">
+                            <div class="bg-success bg-opacity-10 rounded p-3">
+                                <i class="fas fa-book-open fa-2x text-success mb-2"></i>
+                                <h3 class="text-success mb-1">@Model.BooksRead</h3>
+                                <p class="text-muted mb-0">Okunan Kitap</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 text-center mb-3">
+                            <div class="bg-info bg-opacity-10 rounded p-3">
+                                <i class="fas fa-star fa-2x text-info mb-2"></i>
+                                <h3 class="text-info mb-1">@Model.ReviewsWritten</h3>
+                                <p class="text-muted mb-0">Yazýlan Yorum</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 text-center mb-3">
+                            <div class="bg-warning bg-opacity-10 rounded p-3">
+                                <i class="fas fa-comments fa-2x text-warning mb-2"></i>
+                                <h3 class="text-warning mb-1">@Model.TotalComments</h3>
+                                <p class="text-muted mb-0">Yapýlan Yorum</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 text-center mb-3">
+                            <div class="bg-danger bg-opacity-10 rounded p-3">
+                                <i class="fas fa-users fa-2x text-danger mb-2"></i>
+                                <h3 class="text-danger mb-1">@Model.DiscussionsStarted</h3>
+                                <p class="text-muted mb-0">Baþlatýlan Tartýþma</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity Timeline -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-history me-2"></i>Son Etkinlikler
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-marker bg-primary"></div>
+                            <div class="timeline-content">
+                                <h6 class="mb-1">BookSpace'e Katýldý</h6>
+                                <p class="text-muted mb-0">@Model.MemberSince.ToString("MMMM dd, yyyy 'at' h:mm tt")</p>
+                            </div>
+                        </div>
+                        @if (Model.LastLogin.HasValue)
+                        {
+                            <div class="timeline-item">
+                                <div class="timeline-marker bg-success"></div>
+                                <div class="timeline-content">
+                                    <h6 class="mb-1">Son Giriþ</h6>
+                                    <p class="text-muted mb-0">@Model.LastLogin.Value.ToString("MMMM dd, yyyy 'at' h:mm tt")</p>
+                                </div>
+                            </div>
+                        }
+                        @if (Model.BooksRead > 0)
+                        {
+                            <div class="timeline-item">
+                                <div class="timeline-marker bg-info"></div>
+                                <div class="timeline-content">
+                                    <h6 class="mb-1">Okuma Ýlerlemesi</h6>
+                                    <p class="text-muted mb-0">@Model.BooksRead kitap okundu</p>
+                                </div>
+                            </div>
+                        }
+                        @if (Model.ReviewsWritten > 0)
+                        {
+                            <div class="timeline-item">
+                                <div class="timeline-marker bg-warning"></div>
+                                <div class="timeline-content">
+                                    <h6 class="mb-1">Yorum Etkinliði</h6>
+                                    <p class="text-muted mb-0">@Model.ReviewsWritten yorum yazýldý</p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e9ecef;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -22px;
+    top: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 2px #e9ecef;
+}
+
+.timeline-content {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #007bff;
+}
+</style> 

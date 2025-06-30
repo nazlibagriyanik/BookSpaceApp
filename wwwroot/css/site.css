@@ -1,0 +1,224 @@
+/* Base and Grid Layout */
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 80px;
+}
+
+body#page-container {
+  min-height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto; /* Header, Main (stretches), Footer */
+  grid-template-columns: 100%;
+}
+
+#page-header {
+  grid-row: 1 / 2;
+}
+
+#main-content {
+  grid-row: 2 / 3;
+}
+
+#page-footer {
+  grid-row: 3 / 4;
+}
+
+/* Sidebar sticky positioning within the main content grid area */
+#sidebar {
+  position: sticky;
+  top: 70px; /* Adjust based on navbar height */
+  height: calc(100vh - 70px);
+  align-self: start; /* Stick to the top of its container */
+}
+
+/* General Styles from before */
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+.card {
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0,0,0,.125);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Sidebar styles */
+.sidebar {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 65px;
+  height: calc(100vh - 65px);
+  padding-top: 1.5rem;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.sidebar-sticky {
+  position: relative;
+  top: 0;
+  height: calc(100vh - 48px);
+  padding-top: .5rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.sidebar .nav-link {
+  pointer-events: auto !important;
+  z-index: 1001 !important;
+  position: relative;
+  cursor: pointer;
+}
+
+.sidebar .nav-link:hover {
+  background-color: rgba(0, 123, 255, 0.1);
+  color: #007bff !important;
+}
+
+.sidebar-heading {
+  font-size: .75rem;
+  text-transform: uppercase;
+}
+
+/* Book cover placeholder */
+.book-cover-placeholder {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+}
+
+/* Discussion styles */
+.discussion-item {
+  border-left: 4px solid #007bff;
+  padding-left: 1rem;
+  margin-bottom: 1rem;
+}
+
+.comment-item {
+  border-left: 2px solid #dee2e6;
+  padding-left: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Custom button styles */
+.btn-bookspace {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: white;
+}
+
+.btn-bookspace:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  color: white;
+}
+
+/* Stats cards */
+.stats-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 10px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.stats-card h4 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+  main {
+    padding-top: 2rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .main-with-sidebar {
+    margin-left: 250px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .sidebar {
+    z-index: 1040;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .sidebar.active {
+    transform: translateX(0);
+  }
+
+  .navbar-toggler {
+    z-index: 1041;
+  }
+}
+
+/* Navigation improvements */
+.navbar-brand {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.nav-link {
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #fff !important;
+  opacity: 0.8;
+}
+
+/* Form improvements */
+.form-control:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+/* Alert improvements */
+.alert {
+  border-radius: 10px;
+  border: none;
+}
+
+/* Badge improvements */
+.badge {
+  font-size: 0.75rem;
+}
+
+/* Loading animation */
+.loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255,255,255,.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 75px; /* Set a fixed height */
+  line-height: 75px; /* Vertically center the text */
+  background-color: #f8f9fa;
+}

@@ -1,0 +1,52 @@
+@model bookspace.Models.Discussion
+@{
+    ViewData["Title"] = "Tartışma Başlat";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-plus text-primary me-2"></i>Tartışma Başlat</h1>
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-1"></i>Tartışmalara Dön
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="Title" class="control-label">Başlık</label>
+                <input asp-for="Title" class="form-control" placeholder="Tartışma başlığını girin..." />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="Content" class="control-label">İçerik</label>
+                <textarea asp-for="Content" class="form-control" rows="6" placeholder="Bu kitap hakkındaki düşüncelerinizi paylaşın..."></textarea>
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="BookId" class="control-label">Kitap</label>
+                <select asp-for="BookId" class="form-control" asp-items="ViewBag.BookId">
+                    <option value="">-- Kitap Seçin --</option>
+                </select>
+                <span asp-validation-for="BookId" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-plus me-1"></i>Tartışma Başlat
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-times me-1"></i>İptal
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

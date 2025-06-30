@@ -1,0 +1,107 @@
+@model bookspace.Models.Book
+@{
+    ViewData["Title"] = "Kitap Detayları";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-book text-primary me-2"></i>@Model.Title</h1>
+    <div>
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                <i class="fas fa-edit me-1"></i>Düzenle
+            </a>
+            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">
+                <i class="fas fa-trash me-1"></i>Sil
+            </a>
+        }
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Kitaplara Dön
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            @if (!string.IsNullOrEmpty(Model.CoverImageUrl))
+            {
+                <img src="@Model.CoverImageUrl" class="card-img-top" alt="@Model.Title" style="height: 300px; object-fit: cover;">
+            }
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-info-circle me-2"></i>Kitap Bilgileri</h5>
+                <p class="card-text"><strong>Başlık:</strong> @Model.Title</p>
+                <p class="card-text"><strong>Yazar:</strong> @Model.Author</p>
+                <p class="card-text"><strong>ISBN:</strong> @Model.ISBN</p>
+                <p class="card-text"><strong>Yayın Yılı:</strong> @Model.PublicationYear</p>
+                <p class="card-text"><strong>Kategori:</strong> 
+                    <a asp-controller="Categories" asp-action="Details" asp-route-id="@Model.CategoryId">@Model.Category?.Name</a>
+                </p>
+                @if (!string.IsNullOrEmpty(Model.Description))
+                {
+                    <p class="card-text"><strong>Açıklama:</strong> @Model.Description</p>
+                }
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3><i class="fas fa-comments me-2"></i>Tartışmalar</h3>
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <a asp-controller="Discussions" asp-action="Create" asp-route-bookId="@Model.Id" class="btn btn-primary">
+                    <i class="fas fa-plus me-1"></i>Tartışma Başlat
+                </a>
+            }
+        </div>
+        
+        @if (Model.Discussions != null && Model.Discussions.Any())
+        {
+            @foreach (var discussion in Model.Discussions.OrderByDescending(d => d.CreatedAt))
+            {
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">@discussion.Title</h5>
+                            <small class="text-muted">@discussion.CreatedAt.ToString("dd MMMM yyyy")</small>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">@discussion.Content</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                <i class="fas fa-user me-1"></i>@(discussion.User?.UserName ?? "Bilinmeyen Kullanıcı")
+                            </small>
+                            <div>
+                                <span class="badge bg-secondary"><i class="fas fa-comments me-1"></i>@(discussion.Comments?.Count ?? 0) Yorum</span>
+                                <a asp-controller="Discussions" asp-action="Details" asp-route-id="@discussion.Id" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-eye me-1"></i>Tartışmayı Görüntüle
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="alert alert-info">
+                <h4><i class="fas fa-info-circle me-2"></i>Henüz tartışma yok</h4>
+                <p>Bu kitap hakkında ilk tartışmayı başlatan siz olun!</p>
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a asp-controller="Discussions" asp-action="Create" asp-route-bookId="@Model.Id" class="btn btn-primary">
+                        <i class="fas fa-plus me-1"></i>Tartışma Başlat
+                    </a>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt me-1"></i>Tartışma Başlatmak İçin Giriş Yap
+                    </a>
+                }
+            </div>
+        }
+    </div>
+</div> 

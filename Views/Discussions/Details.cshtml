@@ -1,0 +1,97 @@
+@model bookspace.Models.Discussion
+@{
+    ViewData["Title"] = "Tartışma Detayları";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-comments text-primary me-2"></i>@Model.Title</h1>
+    <div>
+        @if (User.Identity?.IsAuthenticated == true && (User.IsInRole("Admin") || Model.UserId == User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value))
+        {
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                <i class="fas fa-edit me-1"></i>Düzenle
+            </a>
+            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">
+                <i class="fas fa-trash me-1"></i>Sil
+            </a>
+        }
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Tartışmalara Dön
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-comment me-2"></i>Tartışma</h5>
+                    <small class="text-muted">@Model.CreatedAt.ToString("dd MMMM yyyy 'saat' HH:mm")</small>
+                </div>
+            </div>
+            <div class="card-body">
+                <p class="card-text">@Model.Content</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">
+                        <i class="fas fa-user me-1"></i>Yazar: @(Model.User?.UserName ?? "Bilinmeyen Kullanıcı")
+                    </small>
+                    <small class="text-muted">
+                        <i class="fas fa-book me-1"></i>Kitap: <a asp-controller="Books" asp-action="Details" asp-route-id="@Model.BookId">@Model.Book?.Title</a>
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <h4><i class="fas fa-comments me-2"></i>Yorumlar (@(Model.Comments?.Count ?? 0))</h4>
+        
+        @if (Model.Comments != null && Model.Comments.Any())
+        {
+            @foreach (var comment in Model.Comments.OrderBy(c => c.CreatedAt))
+            {
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <p class="card-text">@comment.Content</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                <i class="fas fa-user me-1"></i>@(comment.User?.UserName ?? "Bilinmeyen Kullanıcı") tarafından @comment.CreatedAt.ToString("dd MMMM yyyy 'saat' HH:mm")
+                            </small>
+                            @if (User.Identity?.IsAuthenticated == true && (User.IsInRole("Admin") || comment.UserId == User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value))
+                            {
+                                <form asp-action="DeleteComment" method="post" style="display: inline;">
+                                    <input type="hidden" name="commentId" value="@comment.Id" />
+                                    <input type="hidden" name="discussionId" value="@Model.Id" />
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bu yorumu silmek istediğinizden emin misiniz?')">
+                                        <i class="fas fa-trash me-1"></i>Sil
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="alert alert-info">
+                <p><i class="fas fa-info-circle me-2"></i>Henüz yorum yok.</p>
+            </div>
+        }
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-book me-2"></i>Kitap Bilgileri</h5>
+            </div>
+            <div class="card-body">
+                <h6>@Model.Book?.Title</h6>
+                <p class="text-muted">@Model.Book?.Author</p>
+                <p><strong>Kategori:</strong> @Model.Book?.Category?.Name</p>
+                <a asp-controller="Books" asp-action="Details" asp-route-id="@Model.BookId" class="btn btn-primary btn-sm">
+                    <i class="fas fa-eye me-1"></i>Kitabı Görüntüle
+                </a>
+            </div>
+        </div>
+    </div>
+</div> 
